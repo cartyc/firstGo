@@ -11,30 +11,57 @@ type Salutation struct {
 
 type Printer func(string) ()
 
-func Greet(salutation Salutation, do Printer, isFormal bool, times int){
-	message, alternate := CreateMessage(salutation.Name, salutation.Greeting)
+func Greet(salutation []Salutation, do Printer, isFormal bool, times int){
 
-	for i := 0; i < times; i++{
-		if prefix := getPrefix(salutation.Name); isFormal{
-			do(prefix + message)
-		} else {
-			do(alternate)
+	for _,s := range salutation{
+		message, alternate := CreateMessage(s.Name, s.Greeting)
+
+		for i := 0; i < times; i++{
+			if prefix := getPrefix(s.Name); isFormal{
+				do(prefix + message)
+			} else {
+				do(alternate)
+			}
 		}
 	}
+
 
 }
 
 // name string =  arg; prefix string = named return
 func getPrefix(name string) (prefix string){
-	switch name{
-	case "Bob": prefix = "Mr "
-	case "Joe", "Amy": prefix = "Doctor "
-	case "Mary": prefix = "Mrs "
-	default: prefix = "Dude "
+
+	// Short hand declaration
+	prefixMap := map[string]string{
+		"Bob": "Mr ",
+		"Joe": "Dr ",
+		"Amy": "Dr ",
+		"Mary": "Mrs ",
+		}
+
+	prefixMap["Joe"] = "jr "
+
+	// delete key
+	//delete(prefixMap, "Mary")
+
+	// Long Hand declaration of map
+	//var prefixMap map[string]string
+	prefixMap = make(map[string]string)
+	//
+	//prefixMap["Bob"] = "Mr "
+	//prefixMap["Joe"] = "Doc "
+	//prefixMap["Amy"] = "Doc "
+	//prefixMap["Mary"] = "Mrs "
+
+	// Does it exist
+	if value, exists := prefixMap[name]; exists {
+		return value
 	}
 
+	return prefixMap[name]
+
 	return
-}
+	}
 
 func TypeSwitchTest(x interface{}) {
 	 switch t := x.(type){
