@@ -11,14 +11,16 @@ type Salutation struct {
 
 type Printer func(string) ()
 
-func Greet(salutation Salutation, do Printer, isFormal bool){
+func Greet(salutation Salutation, do Printer, isFormal bool, times int){
 	message, alternate := CreateMessage(salutation.Name, salutation.Greeting)
-	if prefix := getPrefix(salutation.Name); isFormal{
-		do(prefix + message)
-	} else {
-		do(alternate)
-	}
 
+	for i := 0; i < times; i++{
+		if prefix := getPrefix(salutation.Name); isFormal{
+			do(prefix + message)
+		} else {
+			do(alternate)
+		}
+	}
 
 }
 
@@ -26,12 +28,21 @@ func Greet(salutation Salutation, do Printer, isFormal bool){
 func getPrefix(name string) (prefix string){
 	switch name{
 	case "Bob": prefix = "Mr "
-	case "Joe": prefix = "Doctor "
+	case "Joe", "Amy": prefix = "Doctor "
 	case "Mary": prefix = "Mrs "
 	default: prefix = "Dude "
 	}
 
-	return prefix
+	return
+}
+
+func TypeSwitchTest(x interface{}) {
+	 switch t := x.(type){
+		case int: fmt.Println("int")
+		case string: fmt.Println("string")
+		case Salutation: fmt.Println("salutation")
+		default: fmt.Printf("%T", t)
+	}
 }
 
 func CreateMessage(name, greeting string) (message string, alternate string) {
@@ -64,3 +75,4 @@ func mathTest(number int) int {
 
 	return multiply
 }
+
